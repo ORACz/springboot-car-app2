@@ -25,7 +25,7 @@ public class CarService implements CarServiceInter {
         cars.add(new Car(1L, "Lamborgini", "Ferano", Color.BLACK));
         cars.add(new Car(2L, "BMW", "X7", Color.NAVY_BLUE));
         cars.add(new Car(3L, "Renault", "Trafic", Color.RED));
-        
+
     }
 
     @Override
