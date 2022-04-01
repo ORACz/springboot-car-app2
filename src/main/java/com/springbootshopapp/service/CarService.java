@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CarService implements CarServiceInter {
@@ -37,9 +38,10 @@ public class CarService implements CarServiceInter {
         return findCarById;
     }
 
-    @Override
+    @Override //get by color
     public List<Car> carByColor(String color) {
-        return null;
+        return getAll().stream().filter(car -> color.equalsIgnoreCase(car.getColor().name()))
+                .collect(Collectors.toList());
     }
 
     @Override
