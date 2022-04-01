@@ -1,4 +1,5 @@
 package com.springbootshopapp.exception;
+
 public class CarNotExist extends RuntimeException {
 
     public CarNotExist(Long id) {

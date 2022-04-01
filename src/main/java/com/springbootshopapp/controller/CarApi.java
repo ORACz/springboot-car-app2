@@ -3,6 +3,7 @@ package com.springbootshopapp.controller;
 import com.springbootshopapp.convertColor.ConvertColor;
 import com.springbootshopapp.model.Car;
 import com.springbootshopapp.service.CarServiceInter;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
@@ -30,7 +31,7 @@ public class CarApi {
         this.convertColor = convertColor;
     }
 
-
+    @ApiOperation(value = "Get all cars")
     @GetMapping
     public ResponseEntity<CollectionModel <Car>> getAllCars(){
         List<Car> carlist = carServiceInter.getAll();

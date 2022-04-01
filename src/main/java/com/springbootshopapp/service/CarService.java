@@ -15,26 +15,28 @@ import java.util.stream.Collectors;
 @Service
 public class CarService implements CarServiceInter {
 
-   private List<Car> cars;
-   private ConvertColor convertColor;
+    private List<Car> cars;
+    private ConvertColor convertColor;
 
-   @Autowired
+    @Autowired
     public CarService(List<Car> cars, ConvertColor convertColor) {
         this.convertColor = convertColor;
         this.cars = new ArrayList<>();
-        cars.add(new Car(1L,"Lamborgini","Ferano", Color.BLACK));
-        cars.add(new Car(2L, "BMW","X7",Color.NAVY_BLUE));
-        cars.add(new Car(3L,"Renault","Trafic",Color.RED));
-
-
+        cars.add(new Car(1L, "Lamborgini", "Ferano", Color.BLACK));
+        cars.add(new Car(2L, "BMW", "X7", Color.NAVY_BLUE));
+        cars.add(new Car(3L, "Renault", "Trafic", Color.RED));
+        
     }
-@Override
-    public List<Car> getAll() {return  cars;}
+
+    @Override
+    public List<Car> getAll() {
+        return cars;
+    }
 
     @Override //get
     public Optional<Car> carById(Long carId) {
-       Optional<Car> findCarById = cars.stream().filter(car -> car.getCarId() == carId).findFirst();
-       findCarById.orElseThrow(()-> new CarNotExist(carId));
+        Optional<Car> findCarById = cars.stream().filter(car -> car.getCarId() == carId).findFirst();
+        findCarById.orElseThrow(() -> new CarNotExist(carId));
         return findCarById;
     }
 
@@ -44,28 +46,57 @@ public class CarService implements CarServiceInter {
                 .collect(Collectors.toList());
     }
 
-    @Override
+
+    @Override //post
     public boolean save(Car car) {
-        return false;
+        return cars.add(car);
     }
 
-    @Override
+    @Override //put
     public boolean changeCar(Long carId, Car changedCar) {
+        Optional<Car> findCar = cars.stream().filter(car -> car.getCarId() == changedCar.getCarId()).findFirst();
+
+        if (findCar.isPresent()) {
+            Car car = findCar.get();
+            car.setMark(changedCar.getMark());
+            car.setModel(changedCar.getModel());
+            car.setColor(changedCar.getColor());
+        } else {
+            changedCar.setCarId(carId);
+            cars.add(changedCar);
+        }
         return false;
     }
 
-    @Override
+    @Override //    patch
     public boolean changeColor(Long carId, Color color) {
+        Optional<Car> first = cars.stream().filter(car -> car.getCarId() == carId).findFirst();
+        if (first.isPresent()) {
+            Car carColor = first.get();
+            carColor.setColor(color);
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean changeMark(Long id, String newMark) {
-        return false;
+        Optional<Car> findMark = cars.stream().filter(car -> car.getCarId() == id).findFirst();
+        if (findMark.isPresent()) {
+            Car carModel = findMark.get();
+            carModel.setMark(newMark);
+            return true;
+        }
+        throw new CarNotExist(id);
     }
 
-    @Override
+    @Override //delete
     public boolean removeById(Long carId) {
-        return false;
+        Optional<Car> first = carById(carId);
+        if (first.isPresent()) {
+            cars.remove(first.get());
+            return true;
+        }
+        throw new CarNotExist(carId);
     }
 }
